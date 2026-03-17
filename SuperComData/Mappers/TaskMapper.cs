@@ -10,14 +10,13 @@ namespace SuperComData.Mappers
 {
     public static class TaskMapper
     {
-        //Entity -> DTO
-        public static TaskItemDto ToDto(this TaskItem entity)
+        //Entity -> TaskCreateDto
+        public static TaskCreateDto ToCreateDto(this TaskItem entity)
         {
             if (entity == null) return null!;
 
-            return new TaskItemDto
+            return new TaskCreateDto
             {
-                Id = entity.Id,
                 Title = entity.Title,
                 Description = entity.Description,
                 DueDate = entity.DueDate,
@@ -29,10 +28,30 @@ namespace SuperComData.Mappers
             };
         }
 
-        //DTO -> Entity
-        //we don't map Tags here because they require DB lookups in the Service
-        public static TaskItem ToEntity(this TaskItemDto dto)
+        //Entity -> TaskReadDto
+        public static TaskReadDto ToReadDto(this TaskItem entity)
         {
+            if (entity == null) return null!;
+
+            return new TaskReadDto
+            {
+                Id = entity.Id,
+                IsOverdueProcessed = entity.IsOverdueProcessed,
+                Title = entity.Title,
+                Description = entity.Description,
+                DueDate = entity.DueDate,
+                Priority = entity.Priority,
+                UserFullName = entity.UserFullName ?? string.Empty,
+                UserEmail = entity.UserEmail ?? string.Empty,
+                UserTelephone = entity.UserTelephone ?? string.Empty,
+                TagNames = entity.Tags?.Select(t => t.Name).ToList() ?? new List<string>()
+            };
+        }
+
+        //TaskCreateDTO -> Entity
+        public static TaskItem ToEntity(this TaskCreateDto dto)
+        {
+            if (dto == null) return null!;
             return new TaskItem
             {
                 Title = dto.Title,

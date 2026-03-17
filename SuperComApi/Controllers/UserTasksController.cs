@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SuperComData.DTOs;
 using SuperComData.Interfaces;
-using SuperComData.Services;
 
 namespace SuperComApi.Controllers
 {
@@ -37,7 +36,7 @@ namespace SuperComApi.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] TaskItemDto dto)
+        public async Task<IActionResult> Create([FromBody] TaskCreateDto dto)
         {
 
             var createdTask = await _taskService.CreateTaskAsync(dto);
@@ -47,7 +46,7 @@ namespace SuperComApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] TaskItemDto taskItemTdo)
+        public async Task<IActionResult> Update(int id, [FromBody] TaskCreateDto taskItemTdo)
         {
             var task = await _taskService.UpdateTaskAsync(id, taskItemTdo);
             if (task == null)

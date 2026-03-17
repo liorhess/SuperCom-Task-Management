@@ -12,7 +12,7 @@ using SuperComData.Context;
 namespace SuperComData.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260317144658_InitialCreate")]
+    [Migration("20260317193524_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />

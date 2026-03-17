@@ -9,10 +9,10 @@ namespace SuperComData.Interfaces
 {
     public interface ITaskService
     {
-        Task<IEnumerable<TaskItemDto>> GetAllTasksAsync();
-        Task<TaskItemDto?> GetTaskByIdAsync(int id);
-        Task<TaskItemDto?> UpdateTaskAsync(int id, TaskItemDto taskItemDto);
-        Task<TaskItemDto> CreateTaskAsync(TaskItemDto taskItemDto);
+        Task<IEnumerable<TaskReadDto>> GetAllTasksAsync();
+        Task<TaskReadDto?> GetTaskByIdAsync(int id);
+        Task<TaskReadDto?> UpdateTaskAsync(int id, TaskCreateDto taskItemDto);
+        Task<TaskReadDto> CreateTaskAsync(TaskCreateDto taskItemDto);
         Task<bool> DeleteTaskAsync(int id);
     }
 }

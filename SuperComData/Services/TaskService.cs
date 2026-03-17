@@ -16,11 +16,11 @@ public class TaskService : ITaskService
         _context = context;
     }
 
-    public async Task<IEnumerable<TaskItemDto>> GetAllTasksAsync()
+    public async Task<IEnumerable<TaskReadDto>> GetAllTasksAsync()
     {
         return await _context.Tasks
             .Include(t => t.Tags)
-            .Select(t => new TaskItemDto
+            .Select(t => new TaskReadDto
             {
                 Id = t.Id,
                 Title = t.Title,
@@ -34,25 +34,25 @@ public class TaskService : ITaskService
             }).ToListAsync();
     }
 
-    public async Task<TaskItemDto?> GetTaskByIdAsync(int id)
+    public async Task<TaskReadDto?> GetTaskByIdAsync(int id)
     {
         var task = await _context.Tasks
             .Include(t => t.Tags)
             .Where(t => t.Id == id).FirstOrDefaultAsync();
         if (task != null)
         {
-            return TaskMapper.ToDto(task);
+            return TaskMapper.ToReadDto(task);
         }
         return null;
     }
 
-    public async Task<TaskItemDto> UpdateTaskAsync(int id, TaskItemDto task)
+    public async Task<TaskReadDto?> UpdateTaskAsync(int id, TaskCreateDto task)
     {
         var existingTask = await _context.Tasks
             .Include(t => t.Tags)
             .FirstOrDefaultAsync(t => t.Id == id);
 
-        if (existingTask == null) throw new Exception("Task not found");
+        if (existingTask == null) return null;
 
 
         existingTask.Title = task.Title;
@@ -75,11 +75,11 @@ public class TaskService : ITaskService
         }
 
         await _context.SaveChangesAsync();
-        return TaskMapper.ToDto(existingTask);
+        return TaskMapper.ToReadDto(existingTask);
     }
 
 
-    public async Task<TaskItemDto> CreateTaskAsync(TaskItemDto taskItemDto)
+    public async Task<TaskReadDto> CreateTaskAsync(TaskCreateDto taskItemDto)
     {
         var task = new TaskItem
         {
@@ -101,7 +101,7 @@ public class TaskService : ITaskService
 
         _context.Tasks.Add(task);
         await _context.SaveChangesAsync();
-        return taskItemDto;
+        return TaskMapper.ToReadDto(task);
     }
 
     public async Task<bool> DeleteTaskAsync(int id)
