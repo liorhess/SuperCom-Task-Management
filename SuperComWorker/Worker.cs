@@ -24,7 +24,6 @@ namespace SuperComWorker
             _queueName = _configuration.GetValue<string>("RabbitMQ:QueueName") ?? "task_reminders";
             _pollingIntervalSeconds = _configuration.GetValue<int?>("Worker:PollingIntervalSeconds") ?? 30;
             _retryDelaySeconds = _configuration.GetValue<int?>("Worker:RetryDelaySeconds") ?? 5;
-            InitRabbitMQ();
         }
 
         private void InitRabbitMQ()
@@ -51,6 +50,11 @@ namespace SuperComWorker
             {
                 try
                 {
+                    if (_connection == null)
+                    {
+                        InitRabbitMQ();
+                    }
+
                     using (var scope = _scopeFactory.CreateScope())
                     {
                         var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();

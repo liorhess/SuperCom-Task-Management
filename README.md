@@ -22,7 +22,15 @@ A `docker-compose.yml` file is included at the root for easy setup.
    ```
 For rabbitMQ UI you can visit http://localhost:15672
 
-### Step 2: Run the Backend (API & Worker Service)
+### Step 2: Create the Database
+Before running the backend, you need to apply the Entity Framework migrations to create the database schema in the Docker SQL instance.
+1. Open a terminal inside the **SuperComApi** folder.
+2. Run the following command:
+   ```bash
+   dotnet ef database update
+   ```
+
+### Step 3: Run the Backend (API & Worker Service)
 The backend requires both the REST API and the Windows Service (Worker) to run simultaneously.
 
 **Using Visual Studio:**
@@ -31,7 +39,7 @@ The backend requires both the REST API and the Windows Service (Worker) to run s
 3. Set the action for both **SuperComApi** and **SuperComWorker** to **Start**.
 4. Press **F5** or click **Start**.
 
-### Step 3: Run the Frontend (Client)
+### Step 4: Run the Frontend (Client)
 1. Open a new terminal and navigate to the frontend directory:
    ```bash
    cd SuperComClient
@@ -50,9 +58,9 @@ The backend requires both the REST API and the Windows Service (Worker) to run s
 
 ## Architectural Overview
 
-* **Frontend:** Built with React, and Redux Toolkit for state management, and Axios for API communication.
-* **Backend API:** Built with .NET 8, implementing RESTful CRUD operations. server-side validation with Data Annotations on DTOs.
-* **Database:** SQL Server with Entity Framework Core. Tasks and Tags use and a many-to-many relationship with ajoin table.
+* **Frontend:** Built with React, Redux Toolkit for state management, and Axios for API communication.
+* **Backend API:** Built with .NET 8, implementing RESTful CRUD operations. Server-side validation with Data Annotations on DTOs.
+* **Database:** SQL Server with Entity Framework Core. Tasks and Tags use a many-to-many relationship with a join table.
 * **Background Processing:** A .NET Worker Service pulls tasks from the database. If a task is past its due date, it pushes a message to RabbitMQ, which is then consumed and logged (to simulate processing).
 
 ---
